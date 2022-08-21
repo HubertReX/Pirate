@@ -112,6 +112,10 @@ class Player(pygame.sprite.Sprite):
 			self.jump()
 			self.create_jump_particles(self.rect.midbottom)
 
+		if keys[pygame.K_q] or keys[pygame.K_ESCAPE]:
+				pygame.quit()
+				exit()
+			
 	def get_status(self):
 		if self.direction.y < 0:
 			self.status = 'jump'
