@@ -1,6 +1,6 @@
-import pygame 
+import pygame
 from support import import_csv_layout, import_cut_graphics
-from settings import TILE_SIZE, SCREEN_HEIGHT, SCREEN_WIDTH
+from settings import * #TILE_SIZE, SCREEN_HEIGHT, SCREEN_WIDTH
 from tiles import Tile, StaticTile, Crate, Coin, Palm
 from enemy import Enemy
 from decoration import Sky, Water, Clouds
@@ -214,7 +214,11 @@ class Level:
 
 	def check_death(self):
 		if self.player.sprite.rect.top > SCREEN_HEIGHT:
-			self.create_overworld(self.current_level,0)
+			if not GOD_MODE:
+				self.create_overworld(self.current_level,0)
+			else:
+				self.player.sprite.safe()
+
 			
 	def check_win(self):
 		if pygame.sprite.spritecollide(self.player.sprite,self.goal,False):
@@ -242,14 +246,18 @@ class Level:
 					self.explosion_sprites.add(explosion_sprite)
 					enemy.kill()
 				else:
-					self.player.sprite.get_damage()
+					if not GOD_MODE:
+						self.player.sprite.get_damage()
 
 	def run(self):
 		# run the entire game / level 
 		
 		# sky 
 		self.sky.draw(self.display_surface)
-		self.clouds.draw(self.display_surface,self.world_shift)
+		if MOVING_CLOUDS:
+			self.clouds.draw(self.display_surface,self.world_shift)
+		else:
+			self.clouds.draw(self.display_surface,0)
 		
 		# background palms
 		self.bg_palm_sprites.update(self.world_shift)

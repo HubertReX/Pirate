@@ -8,9 +8,9 @@ class Game:
 	def __init__(self):
 
 		# game attributes
-		self.max_level = 2
-		self.max_health = 100
-		self.cur_health = 100
+		self.max_level = START_MAX_LEVEL
+		self.max_health = START_MAX_HEALTH
+		self.cur_health = self.max_health 
 		self.coins = 0
 		
 		# audio 
@@ -39,7 +39,8 @@ class Game:
 			self.max_level = new_max_level
 		self.overworld = Overworld(current_level,self.max_level,screen,self.create_level)
 		self.status = 'overworld'
-		self.overworld_bg_music.play(loops = -1)
+		if ENABLE_SOUND_ON_START:
+			self.overworld_bg_music.play(loops = -1)
 		self.level_bg_music.stop()
 
 	def change_coins(self,amount):
