@@ -1,3 +1,4 @@
+import sys
 import pygame 
 from support import import_folder
 from math import sin
@@ -114,7 +115,7 @@ class Player(pygame.sprite.Sprite):
 
 		if keys[pygame.K_q] or keys[pygame.K_ESCAPE]:
 				pygame.quit()
-				exit()
+				sys.exit()
 			
 	def get_status(self):
 		if self.direction.y < 0:

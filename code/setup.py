@@ -17,7 +17,8 @@ cx_Freeze.setup(
     options = {"build_exe" : 
         {
             "packages" : ["pygame"], 
-            "include_files" : ['audio/', 'graphics/', 'levels/']
+            "include_files" : ['../audio/', '../graphics/', '../levels/'],
+            "build_exe" : "bin/"
             }
         },
     executables = executables

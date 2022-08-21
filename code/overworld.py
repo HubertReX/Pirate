@@ -1,3 +1,4 @@
+import sys
 import pygame 
 from game_data import levels
 from support import import_folder
@@ -91,7 +92,7 @@ class Overworld:
 		if not self.moving and self.allow_input:
 			if keys[pygame.K_q] or keys[pygame.K_ESCAPE]:
 					pygame.quit()
-					exit()			
+					sys.exit()			
 			elif keys[pygame.K_RIGHT] and self.current_level < self.max_level:
 				self.move_direction = self.get_movement_data('next')
 				self.current_level += 1
