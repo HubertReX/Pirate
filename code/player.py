@@ -1,3 +1,4 @@
+from cgi import print_arguments
 import sys
 import pygame 
 from support import import_folder
@@ -21,7 +22,8 @@ class Player(pygame.sprite.Sprite):
 
 		# player movement
 		self.direction = pygame.math.Vector2(0,0)
-		self.speed = 8
+		self.MAX_SPEED = 8
+		self.speed = self.MAX_SPEED
 		self.gravity = 0.8
 		self.jump_speed = -16
 		self.collision_rect = pygame.Rect(self.rect.topleft,(50,self.rect.height))
@@ -44,6 +46,13 @@ class Player(pygame.sprite.Sprite):
 		self.jump_sound = pygame.mixer.Sound('../audio/effects/jump.wav')
 		self.jump_sound.set_volume(0.5)
 		self.hit_sound = pygame.mixer.Sound('../audio/effects/hit.wav')
+		
+
+		self.joysticks = pygame.joystick.get_count()
+		if self.joysticks > 0:
+			self.joystick = pygame.joystick.Joystick(0)
+			self.joystick.init()
+
 
 	def import_character_assets(self):
 		character_path = '../graphics/character/'
@@ -99,14 +108,55 @@ class Player(pygame.sprite.Sprite):
 
 	def get_input(self):
 		keys = pygame.key.get_pressed()
+		
+		axis_0   = 0.0
+		button_0 = 0.0
+		button_1 = 0.0
+		# print("Gamepads count: {}".format(joysticks))
+		gamepad_move = False
+		if self.joysticks  > 0:
+			#print(joystick.get_name, joystick.get_id, joystick.get_instance_id, joystick.get_guid, joystick.get_power_level)
+			
+			axes = self.joystick.get_numaxes()
+			#if axes > 0:
+			#	axis_0 = joystick.get_axis(0)
+			axis_0 = self.joystick.get_axis(0)
+			
+			buttons = self.joystick.get_numbuttons()
+			#if buttons > 0:
+			#	button_0 = joystick.get_button(0) 
+			button_0 = self.joystick.get_button(0) 
+			button_1 = self.joystick.get_button(1) 
+			if button_1 > 0:
+				self.status = 'quit'
+			#print("axes: {} buttons: {}".format(axes, buttons))
+			#print("axis_0: {} button_0: {}".format(axis_0, joystick.get_button(0) ))
 
-		if keys[pygame.K_RIGHT]:
+			if axis_0 > 0.1:
+				self.direction.x = 1
+				self.speed = self.MAX_SPEED * axis_0
+				self.facing_right = True
+				gamepad_move = True
+			elif axis_0 < -0.1:
+				self.direction.x = -1
+				self.speed = self.MAX_SPEED * axis_0 * -1
+				self.facing_right = False
+				gamepad_move = True
+			else:
+				self.direction.x = 0				
+			#print("speed:{}".format(self.speed))
+
+			if button_0 == 1 and self.on_ground:
+				self.jump()
+				self.create_jump_particles(self.rect.midbottom)
+
+		if keys[pygame.K_RIGHT] and not gamepad_move:
 			self.direction.x = 1
 			self.facing_right = True
-		elif keys[pygame.K_LEFT]:
+		elif keys[pygame.K_LEFT] and not gamepad_move:
 			self.direction.x = -1
 			self.facing_right = False
-		else:
+		elif not gamepad_move:
 			self.direction.x = 0
 
 		if keys[pygame.K_SPACE] and self.on_ground:
@@ -114,8 +164,10 @@ class Player(pygame.sprite.Sprite):
 			self.create_jump_particles(self.rect.midbottom)
 
 		if keys[pygame.K_q] or keys[pygame.K_ESCAPE]:
-				pygame.quit()
-				sys.exit()
+				#pygame.quit()
+				#sys.exit()
+				self.status = 'quit'
+
 			
 	def get_status(self):
 		if self.direction.y < 0:
@@ -161,9 +213,11 @@ class Player(pygame.sprite.Sprite):
 
 	def update(self):
 		self.get_input()
-		self.get_status()
-		self.animate()
-		self.run_dust_animation()
+		if self.status != 'quit':
+			self.get_status()
+			self.animate()
+			self.run_dust_animation()
 		self.invincibility_timer()
 		self.wave_value()
+
 		

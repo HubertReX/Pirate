@@ -3,6 +3,7 @@ import pygame
 from game_data import levels
 from support import import_folder
 from decoration import Sky
+from settings import *
 
 class Node(pygame.sprite.Sprite):
 	def __init__(self,pos,status,icon_speed,path):
@@ -43,7 +44,7 @@ class Icon(pygame.sprite.Sprite):
 		self.rect.center = self.pos
 
 class Overworld:
-	def __init__(self,start_level,max_level,surface,create_level):
+	def __init__(self, start_level, max_level, surface, create_level):
 
 		# setup 
 		self.display_surface = surface 
@@ -66,6 +67,15 @@ class Overworld:
 		self.allow_input = False
 		self.timer_length = 300
 
+		# gamepade
+		self.joysticks = pygame.joystick.get_count()
+		if self.joysticks > 0:
+			self.joystick = pygame.joystick.Joystick(0)
+			self.joystick.init()		
+
+		self.show_debug_info = SHOW_DEBUG_INFO
+
+
 	def setup_nodes(self):
 		self.nodes = pygame.sprite.Group()
 
@@ -86,23 +96,39 @@ class Overworld:
 		icon_sprite = Icon(self.nodes.sprites()[self.current_level].rect.center)
 		self.icon.add(icon_sprite)
 
-	def input(self):
+	def input(self, selected_line_up, selected_line_down):
 		keys = pygame.key.get_pressed()
 
+		axis_0   = 0.0
+		button_0 = 0.0
+		button_1 = 0.0				
+		button_2 = 0.0				
+		if self.joysticks  > 0:
+			axis_0 = self.joystick.get_axis(0)
+			button_0 = self.joystick.get_button(0) 
+			button_1 = self.joystick.get_button(1) 
+			button_2 = self.joystick.get_button(2) 
+
 		if not self.moving and self.allow_input:
-			if keys[pygame.K_q] or keys[pygame.K_ESCAPE]:
+			if keys[pygame.K_q] or keys[pygame.K_ESCAPE] or button_1:
 					pygame.quit()
 					sys.exit()			
-			elif keys[pygame.K_RIGHT] and self.current_level < self.max_level:
+			elif (keys[pygame.K_RIGHT] or axis_0 > 0.5) and self.current_level < self.max_level:
 				self.move_direction = self.get_movement_data('next')
 				self.current_level += 1
 				self.moving = True
-			elif keys[pygame.K_LEFT] and self.current_level > 0:
+			elif (keys[pygame.K_LEFT] or axis_0 < -0.5) and self.current_level > 0:
 				self.move_direction = self.get_movement_data('previous')
 				self.current_level -= 1
 				self.moving = True
-			elif keys[pygame.K_SPACE]:
+			elif (keys[pygame.K_UP]):
+				selected_line_up()
+			elif (keys[pygame.K_DOWN]):
+				selected_line_down()
+			elif keys[pygame.K_SPACE] or button_0:
 				self.create_level(self.current_level)
+			elif keys[pygame.K_BACKQUOTE] or button_2:
+				self.show_debug_info = not self.show_debug_info
 
 	def get_movement_data(self,target):
 		start = pygame.math.Vector2(self.nodes.sprites()[self.current_level].rect.center)
@@ -128,9 +154,9 @@ class Overworld:
 			if current_time - self.start_time >= self.timer_length:
 				self.allow_input = True
 
-	def run(self):
+	def run(self, selected_line_up, selected_line_down):
 		self.input_timer()
-		self.input()
+		self.input(selected_line_up, selected_line_down)
 		self.update_icon_pos()
 		self.icon.update()
 		self.nodes.update()

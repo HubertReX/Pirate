@@ -1,0 +1,71 @@
+{
+    "activeFile": "tilesets/coin_tiles.tsx",
+    "expandedProjectPaths": [
+        "tilesets",
+        ".",
+        "level_data"
+    ],
+    "fileStates": {
+        "level_data/level_0.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 336,
+                "y": 806
+            }
+        },
+        "tilesets/coin_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1.5
+        },
+        "tilesets/crates.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/enemy_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "tilesets/grass_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "tilesets/palms.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/player_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilesets/terrain_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/user/Desktop/Projekty Mateusza/Pirate/levels/3",
+    "map.lastUsedExportFilter": "Wszystkie pliki (*)",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+        "level_data/level_0.tmx",
+        "tilesets/palms.tsx",
+        "tilesets/terrain_tiles.tsx",
+        "tilesets/player_tiles.tsx",
+        "tilesets/crates.tsx",
+        "tilesets/coin_tiles.tsx"
+    ],
+    "project": "Pirate.tiled-project",
+    "recentFiles": [
+        "level_data/level_0.tmx",
+        "tilesets/palms.tsx",
+        "tilesets/terrain_tiles.tsx",
+        "tilesets/player_tiles.tsx",
+        "tilesets/crates.tsx",
+        "tilesets/coin_tiles.tsx"
+    ]
+}

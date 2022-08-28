@@ -1,7 +1,7 @@
 import pygame
 from support import import_csv_layout, import_cut_graphics
 from settings import * #TILE_SIZE, SCREEN_HEIGHT, SCREEN_WIDTH
-from tiles import Tile, StaticTile, Crate, Coin, Palm
+from tiles import Tile, StaticTile, Crate, Coin, Palm, Heart
 from enemy import Enemy
 from decoration import Sky, Water, Clouds
 from player import Player
@@ -18,6 +18,7 @@ class Level:
 		# audio 
 		self.coin_sound = pygame.mixer.Sound('../audio/effects/coin.wav')
 		self.stomp_sound = pygame.mixer.Sound('../audio/effects/stomp.wav')
+		self.heart_sound = pygame.mixer.Sound('../audio/effects/heart.wav')
 
 		# overworld connection 
 		self.create_overworld = create_overworld
@@ -33,6 +34,7 @@ class Level:
 
 		# user interface 
 		self.change_coins = change_coins
+		self.change_health = change_health
 
 		# dust 
 		self.dust_sprite = pygame.sprite.GroupSingle()
@@ -56,6 +58,10 @@ class Level:
 		# coins 
 		coin_layout = import_csv_layout(level_data['coins'])
 		self.coin_sprites = self.create_tile_group(coin_layout,'coins')
+
+		# hearts
+		heart_layout = import_csv_layout(level_data['coins'])
+		self.heart_sprites = self.create_tile_group(heart_layout,'hearts')
 
 		# foreground palms 
 		fg_palm_layout = import_csv_layout(level_data['fg palms'])
@@ -87,6 +93,7 @@ class Level:
 				if val != '-1':
 					x = col_index * TILE_SIZE
 					y = row_index * TILE_SIZE
+					sprite = None
 
 					if type == 'terrain':
 						terrain_tile_list = import_cut_graphics('../graphics/terrain/terrain_tiles.png')
@@ -105,9 +112,13 @@ class Level:
 						if val == '0': sprite = Coin(TILE_SIZE,x,y,'../graphics/coins/gold',5)
 						if val == '1': sprite = Coin(TILE_SIZE,x,y,'../graphics/coins/silver',1)
 
+					if type == 'hearts':
+						if val == '2': sprite = Heart(TILE_SIZE,x,y,'../graphics/coins/heart')
+
 					if type == 'fg palms':
 						if val == '0': sprite = Palm(TILE_SIZE,x,y,'../graphics/terrain/palm_small',38)
 						if val == '1': sprite = Palm(TILE_SIZE,x,y,'../graphics/terrain/palm_large',64)
+						if val == '7': sprite = Palm(TILE_SIZE,x,y,'../graphics/terrain/palm_small_short',-10)
 
 					if type == 'bg palms':
 						sprite = Palm(TILE_SIZE,x,y,'../graphics/terrain/palm_bg',64)
@@ -117,8 +128,9 @@ class Level:
 
 					if type == 'constraint':
 						sprite = Tile(TILE_SIZE,x,y)
-
-					sprite_group.add(sprite)
+					
+					if sprite:
+						sprite_group.add(sprite)
 		
 		return sprite_group
 
@@ -195,7 +207,7 @@ class Level:
 			player.speed = 0
 		else:
 			self.world_shift = 0
-			player.speed = 8
+			player.speed = player.MAX_SPEED
 
 	def get_player_on_ground(self):
 		if self.player.sprite.on_ground:
@@ -209,30 +221,37 @@ class Level:
 				offset = pygame.math.Vector2(10,15)
 			else:
 				offset = pygame.math.Vector2(-10,15)
-			fall_dust_particle = ParticleEffect(self.player.sprite.rect.midbottom - offset,'land')
+			fall_dust_particle = ParticleEffect(self.player.sprite.rect.midbottom - offset, 'land')
 			self.dust_sprite.add(fall_dust_particle)
 
-	def check_death(self):
+	def check_death(self):			
 		if self.player.sprite.rect.top > SCREEN_HEIGHT:
 			if not GOD_MODE:
-				self.create_overworld(self.current_level,0)
+				self.create_overworld(self.current_level, 0)
 			else:
 				self.player.sprite.safe()
 
 			
 	def check_win(self):
-		if pygame.sprite.spritecollide(self.player.sprite,self.goal,False):
-			self.create_overworld(self.current_level,self.new_max_level)
+		if pygame.sprite.spritecollide(self.player.sprite, self.goal, False):
+			self.create_overworld(self.current_level, self.new_max_level)
 			
 	def check_coin_collisions(self):
-		collided_coins = pygame.sprite.spritecollide(self.player.sprite,self.coin_sprites,True)
+		collided_coins = pygame.sprite.spritecollide(self.player.sprite, self.coin_sprites, True)
 		if collided_coins:
 			self.coin_sound.play()
 			for coin in collided_coins:
 				self.change_coins(coin.value)
 
+	def check_heart_collisions(self):
+		collided_hearts = pygame.sprite.spritecollide(self.player.sprite, self.heart_sprites, True)
+		if collided_hearts:
+			self.heart_sound.play()
+			for coin in collided_hearts:
+				self.change_health(HEART_RECOVERY)
+
 	def check_enemy_collisions(self):
-		enemy_collisions = pygame.sprite.spritecollide(self.player.sprite,self.enemy_sprites,False)
+		enemy_collisions = pygame.sprite.spritecollide(self.player.sprite, self.enemy_sprites, False)
 
 		if enemy_collisions:
 			for enemy in enemy_collisions:
@@ -291,12 +310,19 @@ class Level:
 		self.coin_sprites.update(self.world_shift)
 		self.coin_sprites.draw(self.display_surface)
 
+		# hearts
+		self.heart_sprites.update(self.world_shift)
+		self.heart_sprites.draw(self.display_surface)
+
 		# foreground palms
 		self.fg_palm_sprites.update(self.world_shift)
 		self.fg_palm_sprites.draw(self.display_surface)
 
 		# player sprites
 		self.player.update()
+		#print(self.player.sprite.status)
+		if self.player.sprite.status == 'quit':
+			self.create_overworld(self.current_level, 0)
 		self.horizontal_movement_collision()
 		
 		self.get_player_on_ground()
@@ -312,6 +338,7 @@ class Level:
 		self.check_win()
 
 		self.check_coin_collisions()
+		self.check_heart_collisions()
 		self.check_enemy_collisions()
 
 		# water 
