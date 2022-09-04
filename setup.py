@@ -14,11 +14,12 @@ executables = [cx_Freeze.Executable('main.py', base = "Win32GUI")]
 
 cx_Freeze.setup(
     name = "Pirate",
+    version = "0.3.0",
     options = {"build_exe" : 
         {
             "packages" : ["pygame"], 
-            "include_files" : ['../audio/', '../graphics/', '../levels/'],
-            "build_exe" : "bin/"
+            "include_files" : ['audio/', 'graphics/', 'levels/'],
+            "build_exe" : "build/win/"
             }
         },
     executables = executables

@@ -10,7 +10,7 @@
             "type": "python",
             "request": "launch",
             "program": "main.py",
-            "cwd": "${workspaceFolder}//code",
+            "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "justMyCode": true
         }
