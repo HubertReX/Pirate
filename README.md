@@ -32,6 +32,12 @@ https://github.com/clear-code-projects/2D-Mario-style-platformer
 | back/quit | q, Esc | B |
 | debug view | ~ | X |
 
+Gamepad functionality tested using Xbox One Wireless pad.
+On Mac there was problem of detecing gamepad, but after installing this tool it all worked as on Windows:
+[https://generalarcade.com/gamepadtool/](https://generalarcade.com/gamepadtool/)
+
+debug view requires GOD_MODE flag in settings.py to be set to True 
+
 ## Compatibility
 
 | Browser OS | Windows | Linux | Mac | Android | iOS |
