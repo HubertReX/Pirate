@@ -6,7 +6,7 @@ SCREEN_HEIGHT = VERTICAL_TILE_NUMBER * TILE_SIZE
 SCREEN_WIDTH = 1728 # 1200 1920
 
 # macbook air 2560 1600
-FULL_SCREEN = False
+FULL_SCREEN = True
 
 # toggle wether screen resolution should be scaled in full screen mode
 SCALED = FULL_SCREEN # True
@@ -24,7 +24,7 @@ MOVING_CLOUDS = False
 HORIZON_LEVEL = 0.65
 
 # immortal mode for debug
-GOD_MODE = True
+GOD_MODE = False
 
 # how many levels are available on start
 START_MAX_LEVEL = 4

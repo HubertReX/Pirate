@@ -10,5 +10,5 @@ REM see https://pypi.org/project/pygbag/ for more details
 
 set current_dir=%CD%
 cd ..
-pygbag --app_name %project_name% "%current_dir%"
+pygbag --bind 192.168.1.36 --template %project_name%/mobile.tmpl --app_name %project_name% "%current_dir%"
 cd "%current_dir%"

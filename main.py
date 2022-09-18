@@ -93,13 +93,13 @@ class Game:
 			self.ui.show_titles("Pirat! Arrr...")
 			self.ui.reset()
 			self.ui.show_fps(self.fps)
-			self.ui.debug_panel.print("Is mobile: {}".format(self.cfg.is_mobile))
+			#self.ui.debug_panel.print("Is mobile: {}".format(self.cfg.is_mobile))
 			#self.ui.debug_panel.print("In web: {}".format(__EMSCRIPTEN__))
-			self.ui.debug_panel.print("Resolution: {}x{}".format(self.cfg.screen_width, self.cfg.screen_height))
+			#self.ui.debug_panel.print("Resolution: {}x{}".format(self.cfg.screen_width, self.cfg.screen_height))
 			
 			if self.cfg.show_debug_info and self.cfg.god_mode:
 				self.ui.show_debug_info()
-			if self.cfg.is_mobile or 1:
+			if self.cfg.is_mobile:
 				self.ui.show_touchscreen_info()
 		else:
 			self.level.run(self.ui.get_touchscreen_panel, self.ui.debug_log)
@@ -109,7 +109,7 @@ class Game:
 			self.ui.show_coins(self.coins)
 			if self.cfg.show_debug_info and self.cfg.god_mode:
 				self.ui.show_debug_info()
-			if self.cfg.is_mobile or 1:
+			if self.cfg.is_mobile:
 				self.ui.show_touchscreen_info()
 			self.check_game_over()
 
