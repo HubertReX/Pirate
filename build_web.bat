@@ -7,5 +7,5 @@ REM see https://pypi.org/project/pygbag/ for more details
 
 set current_dir=%CD%
 cd ..
-pygbag --build --archive --app_name %project_name% "%current_dir%"
+pygbag --build --archive $project_name/mobile.tmpl --app_name %project_name% "%current_dir%"
 cd "%current_dir%"

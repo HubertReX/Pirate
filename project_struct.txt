@@ -1,0 +1,24 @@
+main
+-- level
+------ tiles
+------ enemy
+---------- tiles
+------ decoration
+---------- tiles
+------ player
+------ particles
+------ game_data
+-- tiles
+-- enemy
+------ tiles
+-- decoration
+------ tiles
+-- player
+-- particles
+-- game_data
+-- overworld
+------ game_data
+------ decoration
+---------- tiles
+------ tiles
+-- ui

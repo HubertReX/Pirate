@@ -1,6 +1,7 @@
+from re import S
 import pygame
 from support import import_csv_layout, import_cut_graphics
-from settings import * #TILE_SIZE, SCREEN_HEIGHT, SCREEN_WIDTH
+#from settings import * #tile_size, SCREEN_HEIGHT, SCREEN_WIDTH
 from tiles import Tile, StaticTile, Crate, Coin, Palm, Heart
 from enemy import Enemy
 from decoration import Sky, Water, Clouds
@@ -9,9 +10,16 @@ from particles import ParticleEffect
 from game_data import levels
 
 class Level:
-	def __init__(self,current_level,surface,create_overworld,change_coins,change_health):
+	def __init__(self, current_level, cfg, create_overworld, change_coins, change_health):
+		
+		# dirty hack, actuall fun passed in run, but should be passed in init
+		self.get_touchscreen_panel = lambda x, y: "NONE"
+
+		#self.show_debug_info = cfg.SHOW_DEBUG_INFO
+		
 		# general setup
-		self.display_surface = surface
+		self.cfg = cfg
+		self.display_surface = cfg.screen
 		self.world_shift = 0
 		self.current_x = None
 
@@ -30,7 +38,6 @@ class Level:
 		player_layout = import_csv_layout(level_data['player'])
 		self.player = pygame.sprite.GroupSingle()
 		self.goal = pygame.sprite.GroupSingle()
-		self.player_setup(player_layout,change_health)
 
 		# user interface 
 		self.change_coins = change_coins
@@ -45,89 +52,99 @@ class Level:
 
 		# terrain setup
 		terrain_layout = import_csv_layout(level_data['terrain'])
+		self.level_width  = len(terrain_layout[0]) * self.cfg.tile_size
+		self.level_height = len(terrain_layout) * self.cfg.tile_size
+		print(f"screen width: {self.cfg.screen_width / self.cfg.tile_size} height: {self.cfg.screen_height / self.cfg.tile_size}")
+		print(f"level  width: {len(terrain_layout[0])} height: {len(terrain_layout)}")
+		
+		self.cfg.vertical_offset = ( self.cfg.vertical_tile_number - len(terrain_layout) ) * self.cfg.tile_size
+		print(f"vertical tile number: {self.cfg.vertical_tile_number} offset: {self.cfg.vertical_offset}")
+
+		self.player_setup(player_layout, change_health)
+
 		self.terrain_sprites = self.create_tile_group(terrain_layout,'terrain')
 
 		# grass setup 
 		grass_layout = import_csv_layout(level_data['grass'])
-		self.grass_sprites = self.create_tile_group(grass_layout,'grass')
+		self.grass_sprites = self.create_tile_group(grass_layout, 'grass')
 
 		# crates 
 		crate_layout = import_csv_layout(level_data['crates'])
-		self.crate_sprites = self.create_tile_group(crate_layout,'crates')
+		self.crate_sprites = self.create_tile_group(crate_layout, 'crates')
 
 		# coins 
 		coin_layout = import_csv_layout(level_data['coins'])
-		self.coin_sprites = self.create_tile_group(coin_layout,'coins')
+		self.coin_sprites = self.create_tile_group(coin_layout, 'coins')
 
 		# hearts
 		heart_layout = import_csv_layout(level_data['coins'])
-		self.heart_sprites = self.create_tile_group(heart_layout,'hearts')
+		self.heart_sprites = self.create_tile_group(heart_layout, 'hearts')
 
 		# foreground palms 
 		fg_palm_layout = import_csv_layout(level_data['fg palms'])
-		self.fg_palm_sprites = self.create_tile_group(fg_palm_layout,'fg palms')
+		self.fg_palm_sprites = self.create_tile_group(fg_palm_layout, 'fg palms')
 
 		# background palms 
 		bg_palm_layout = import_csv_layout(level_data['bg palms'])
-		self.bg_palm_sprites = self.create_tile_group(bg_palm_layout,'bg palms')
+		self.bg_palm_sprites = self.create_tile_group(bg_palm_layout, 'bg palms')
 
 		# enemy 
 		enemy_layout = import_csv_layout(level_data['enemies'])
-		self.enemy_sprites = self.create_tile_group(enemy_layout,'enemies')
+		self.enemy_sprites = self.create_tile_group(enemy_layout, 'enemies')
 
 		# constraint 
 		constraint_layout = import_csv_layout(level_data['constraints'])
-		self.constraint_sprites = self.create_tile_group(constraint_layout,'constraint')
+		self.constraint_sprites = self.create_tile_group(constraint_layout, 'constraint')
 
 		# decoration 
-		self.sky = Sky(8)
-		level_width = len(terrain_layout[0]) * TILE_SIZE
-		self.water = Water(SCREEN_HEIGHT - 20,level_width)
-		self.clouds = Clouds(400,level_width,30)
+		self.sky = Sky(self.cfg)
+		self.water = Water(self.cfg, self.level_width)
+		self.clouds = Clouds(self.cfg, self.level_width, 30)
 
-	def create_tile_group(self,layout,type):
+	def create_tile_group(self, layout, type):
 		sprite_group = pygame.sprite.Group()
+		print(f"vertical tile number: {self.cfg.vertical_tile_number} offset: {self.cfg.vertical_offset}")
 
 		for row_index, row in enumerate(layout):
 			for col_index,val in enumerate(row):
 				if val != '-1':
-					x = col_index * TILE_SIZE
-					y = row_index * TILE_SIZE
+					x = col_index * self.cfg.tile_size
+					y = self.cfg.vertical_offset + (row_index * self.cfg.tile_size)
 					sprite = None
 
 					if type == 'terrain':
-						terrain_tile_list = import_cut_graphics('graphics/terrain/terrain_tiles.png')
+						terrain_tile_list = import_cut_graphics('graphics/terrain/terrain_tiles.png', self.cfg.tile_size)
 						tile_surface = terrain_tile_list[int(val)]
-						sprite = StaticTile(TILE_SIZE,x,y,tile_surface)
+						sprite = StaticTile(self.cfg.tile_size,x,y,tile_surface)
 						
 					if type == 'grass':
-						grass_tile_list = import_cut_graphics('graphics/decoration/grass/grass.png')
+						grass_tile_list = import_cut_graphics('graphics/decoration/grass/grass.png', self.cfg.tile_size)
 						tile_surface = grass_tile_list[int(val)]
-						sprite = StaticTile(TILE_SIZE,x,y,tile_surface)
+						sprite = StaticTile(self.cfg.tile_size,x,y,tile_surface)
 					
 					if type == 'crates':
-						sprite = Crate(TILE_SIZE,x,y)
+						sprite = Crate(self.cfg.tile_size,x,y)
 
 					if type == 'coins':
-						if val == '0': sprite = Coin(TILE_SIZE,x,y,'graphics/coins/gold',5)
-						if val == '1': sprite = Coin(TILE_SIZE,x,y,'graphics/coins/silver',1)
+						if val == '0': sprite = Coin(self.cfg.tile_size,x,y,'graphics/coins/gold',5)
+						if val == '1': sprite = Coin(self.cfg.tile_size,x,y,'graphics/coins/silver',1)
 
 					if type == 'hearts':
-						if val == '2': sprite = Heart(TILE_SIZE,x,y,'graphics/coins/heart')
+						if val == '2': sprite = Heart(self.cfg.tile_size,x,y,'graphics/coins/heart')
 
 					if type == 'fg palms':
-						if val == '0': sprite = Palm(TILE_SIZE,x,y,'graphics/terrain/palm_small',38)
-						if val == '1': sprite = Palm(TILE_SIZE,x,y,'graphics/terrain/palm_large',64)
-						if val == '7': sprite = Palm(TILE_SIZE,x,y,'graphics/terrain/palm_small_short',-10)
+						if val == '0': sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_small',38)
+						if val == '1': sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_large',64)
+						if val == '7': sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_small_short',-10)
 
 					if type == 'bg palms':
-						sprite = Palm(TILE_SIZE,x,y,'graphics/terrain/palm_bg',64)
+						sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_bg',64)
 
 					if type == 'enemies':
-						sprite = Enemy(TILE_SIZE,x,y)
+						sprite = Enemy(self.cfg.tile_size,x,y)
 
 					if type == 'constraint':
-						sprite = Tile(TILE_SIZE,x,y)
+						sprite = Tile(self.cfg.tile_size,x,y)
 					
 					if sprite:
 						sprite_group.add(sprite)
@@ -137,14 +154,14 @@ class Level:
 	def player_setup(self,layout,change_health):
 		for row_index, row in enumerate(layout):
 			for col_index,val in enumerate(row):
-				x = col_index * TILE_SIZE
-				y = row_index * TILE_SIZE
+				x = col_index * self.cfg.tile_size
+				y =  + self.cfg.vertical_offset + (row_index * self.cfg.tile_size)
 				if val == '0':
-					sprite = Player((x,y),self.display_surface,self.create_jump_particles,change_health)
+					sprite = Player((x ,y), self.cfg, self.create_jump_particles, change_health)
 					self.player.add(sprite)
 				if val == '1':
 					hat_surface = pygame.image.load('graphics/character/hat.png').convert_alpha()
-					sprite = StaticTile(TILE_SIZE,x,y,hat_surface)
+					sprite = StaticTile(self.cfg.tile_size, x, y, hat_surface)
 					self.goal.add(sprite)
 
 	def enemy_collision_reverse(self):
@@ -199,10 +216,10 @@ class Level:
 		player_x = player.rect.centerx
 		direction_x = player.direction.x
 
-		if player_x < SCREEN_WIDTH / 4 and direction_x < 0:
+		if player_x < self.cfg.screen_width / 4 and direction_x < 0:
 			self.world_shift = 8
 			player.speed = 0
-		elif player_x > SCREEN_WIDTH - (SCREEN_WIDTH / 4) and direction_x > 0:
+		elif player_x > self.cfg.screen_width - (self.cfg.screen_width / 4) and direction_x > 0:
 			self.world_shift = -8
 			player.speed = 0
 		else:
@@ -225,8 +242,8 @@ class Level:
 			self.dust_sprite.add(fall_dust_particle)
 
 	def check_death(self):			
-		if self.player.sprite.rect.top > SCREEN_HEIGHT:
-			if not GOD_MODE:
+		if self.player.sprite.rect.top > self.cfg.screen_height:
+			if not self.cfg.god_mode:
 				self.create_overworld(self.current_level, 0)
 			else:
 				self.player.sprite.safe()
@@ -239,16 +256,18 @@ class Level:
 	def check_coin_collisions(self):
 		collided_coins = pygame.sprite.spritecollide(self.player.sprite, self.coin_sprites, True)
 		if collided_coins:
-			self.coin_sound.play()
+			if self.cfg.enable_sound_effects:
+				self.coin_sound.play()
 			for coin in collided_coins:
 				self.change_coins(coin.value)
 
 	def check_heart_collisions(self):
 		collided_hearts = pygame.sprite.spritecollide(self.player.sprite, self.heart_sprites, True)
 		if collided_hearts:
-			self.heart_sound.play()
+			if self.cfg.enable_sound_effects:
+				self.heart_sound.play()
 			for coin in collided_hearts:
-				self.change_health(HEART_RECOVERY)
+				self.change_health(self.cfg.heart_recovery)
 
 	def check_enemy_collisions(self):
 		enemy_collisions = pygame.sprite.spritecollide(self.player.sprite, self.enemy_sprites, False)
@@ -259,21 +278,26 @@ class Level:
 				enemy_top = enemy.rect.top
 				player_bottom = self.player.sprite.rect.bottom
 				if enemy_top < player_bottom < enemy_center and self.player.sprite.direction.y >= 0:
-					self.stomp_sound.play()
+					if self.cfg.enable_sound_effects:
+						self.stomp_sound.play()
 					self.player.sprite.direction.y = -15
 					explosion_sprite = ParticleEffect(enemy.rect.center,'explosion')
 					self.explosion_sprites.add(explosion_sprite)
 					enemy.kill()
 				else:
-					if not GOD_MODE:
+					if not self.cfg.god_mode:
 						self.player.sprite.get_damage()
 
-	def run(self):
+	def run(self, get_touchscreen_panel, debug_log):
 		# run the entire game / level 
 		
+		# touchscreen handle
+		self.get_touchscreen_panel = get_touchscreen_panel
+		self.debug_log = debug_log
+
 		# sky 
 		self.sky.draw(self.display_surface)
-		if MOVING_CLOUDS:
+		if self.cfg.moving_clouds:
 			self.clouds.draw(self.display_surface,self.world_shift)
 		else:
 			self.clouds.draw(self.display_surface,0)
@@ -318,8 +342,9 @@ class Level:
 		self.fg_palm_sprites.update(self.world_shift)
 		self.fg_palm_sprites.draw(self.display_surface)
 
-		# player sprites
-		self.player.update()
+		# player sprites		 
+		self.player.update(self.get_touchscreen_panel, debug_log)
+		#self.cfg.show_debug_info = self.player.sprite.show_debug_info
 		#print(self.player.sprite.status)
 		if self.player.sprite.status == 'quit':
 			self.create_overworld(self.current_level, 0)
@@ -343,3 +368,9 @@ class Level:
 
 		# water 
 		self.water.draw(self.display_surface,self.world_shift)
+
+		try:
+			pass
+		except Exception as e:
+			print("EXCEPTION: {}".format(e))
+			self.debug_log("EXCEPTION: {}".format(e))

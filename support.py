@@ -1,5 +1,5 @@
 from csv import reader
-from settings import TILE_SIZE
+#from settings import TILE_SIZE
 from os import walk
 import pygame
 
@@ -22,18 +22,18 @@ def import_csv_layout(path):
 			terrain_map.append(list(row))
 		return terrain_map
 
-def import_cut_graphics(path):
+def import_cut_graphics(path, tile_size):
 	surface = pygame.image.load(path).convert_alpha()
-	tile_num_x = int(surface.get_size()[0] / TILE_SIZE)
-	tile_num_y = int(surface.get_size()[1] / TILE_SIZE)
+	tile_num_x = int(surface.get_size()[0] / tile_size)
+	tile_num_y = int(surface.get_size()[1] / tile_size)
 
 	cut_tiles = []
 	for row in range(tile_num_y):
 		for col in range(tile_num_x):
-			x = col * TILE_SIZE
-			y = row * TILE_SIZE
-			new_surf = pygame.Surface((TILE_SIZE,TILE_SIZE),flags = pygame.SRCALPHA)
-			new_surf.blit(surface,(0,0),pygame.Rect(x,y,TILE_SIZE,TILE_SIZE))
+			x = col * tile_size
+			y = row * tile_size
+			new_surf = pygame.Surface((tile_size, tile_size),flags = pygame.SRCALPHA)
+			new_surf.blit(surface,(0,0), pygame.Rect(x, y, tile_size, tile_size))
 			cut_tiles.append(new_surf)
 
 	return cut_tiles
