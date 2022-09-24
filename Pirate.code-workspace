@@ -3,5 +3,22 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Build web (zsh)",
+				"type": "shell",
+				"command": "./build_web.sh",
+				"problemMatcher": []
+			},
+			{
+				"label": "Run web (zsh)",
+				"type": "shell",
+				"command": "./run_web.sh",
+				"problemMatcher": []
+			}			
+		]
+	}
 }

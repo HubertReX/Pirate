@@ -159,8 +159,9 @@ class Overworld:
 		# keyboard support
 		if not self.moving and self.allow_input:
 			if keys[pygame.K_q] or keys[pygame.K_ESCAPE] or button_1 or panel_name == "BACK":
-					pygame.quit()
-					sys.exit()			
+					#pygame.quit()
+					#sys.exit()			
+					self.cfg.is_running = False
 			elif (keys[pygame.K_RIGHT] or axis_0 > 0.5 or panel_name == "RIGHT") and self.current_level < self.max_level:
 				self.move_direction = self.get_movement_data('next')
 				self.current_level += 1

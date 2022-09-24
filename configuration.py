@@ -1,9 +1,10 @@
-import pygame, sys, math
+import pygame, math
 import settings
 
 class configuration:
     def __init__(self, is_mobile, is_web):
 
+        self.is_running = True
         self.is_mobile = is_mobile
         self.is_web = is_web
 
@@ -36,8 +37,14 @@ class configuration:
         # show debug info on start (press '~' or 'x' on gamepad to toggle)
         self.show_debug_info = settings.SHOW_DEBUG_INFO
 
+        # show touchscreen buttons
+        self.show_touchscreen = settings.SHOW_TOUCHSCREEN
+
         # amount of health recovered by a heart
         self.heart_recovery = settings.HEART_RECOVERY
+
+        # max fps (cut-off for fast machines)
+        self.max_fps = settings.MAX_FPS
 
         self.message_log = settings.MESSAGE_LOG
 

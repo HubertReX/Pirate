@@ -1,6 +1,6 @@
 import asyncio
 from configuration import configuration
-import pygame, sys
+import pygame, sys, time
 #from settings import * 
 from level import Level
 from overworld import Overworld
@@ -25,18 +25,22 @@ class Game:
 	def __init__(self):
 		self.cfg = configuration(__MOBILE__, __EMSCRIPTEN__)
 		self.screen = self.cfg.screen
+
 		# game attributes
 		self.max_level = self.cfg.start_max_level
 		self.max_health = self.cfg.start_max_health
 		self.cur_health = self.max_health 
 		self.coins = 0
+		self.prev_time = time.time()
+		self.dt = time.time() - self.prev_time
 
 		# current fps
 		self.fps = 0
+		self.cfg.frame_no = 0
 		
 		# audio 
-		self.level_bg_music = pygame.mixer.Sound('audio/level_music.wav')
-		self.overworld_bg_music = pygame.mixer.Sound('audio/overworld_music.wav')
+		self.level_bg_music = pygame.mixer.Sound('audio/level_music.ogg')
+		self.overworld_bg_music = pygame.mixer.Sound('audio/overworld_music.ogg')
 
 		# overworld creation
 		self.overworld = Overworld(0, self.max_level, self.cfg, self.create_level)
@@ -47,6 +51,10 @@ class Game:
 		# user interface 
 		self.ui = UI(self.cfg)
 
+	def tick(self):
+		self.dt = time.time() - self.prev_time
+		self.prev_time = time.time()
+		self.cfg.frame_no += 1
 
 	def create_level(self,current_level):
 		self.level = Level(current_level, self.cfg, self.create_overworld, self.change_coins, self.change_health)
@@ -60,9 +68,9 @@ class Game:
 			self.max_level = new_max_level
 		self.overworld = Overworld(current_level, self.max_level, self.cfg, self.create_level)
 		self.status = 'overworld'
+		self.level_bg_music.stop()
 		if self.cfg.enable_sound_on_start:
 			self.overworld_bg_music.play(loops = -1)
-		self.level_bg_music.stop()
 
 	def change_coins(self,amount):
 		self.coins += amount
@@ -93,23 +101,25 @@ class Game:
 			self.ui.show_titles("Pirat! Arrr...")
 			self.ui.reset()
 			self.ui.show_fps(self.fps)
+			self.ui.debug_panel.print("Delta time: {:<4.3f}".format(self.dt))
 			#self.ui.debug_panel.print("Is mobile: {}".format(self.cfg.is_mobile))
 			#self.ui.debug_panel.print("In web: {}".format(__EMSCRIPTEN__))
 			#self.ui.debug_panel.print("Resolution: {}x{}".format(self.cfg.screen_width, self.cfg.screen_height))
 			
 			if self.cfg.show_debug_info and self.cfg.god_mode:
 				self.ui.show_debug_info()
-			if self.cfg.is_mobile:
+			if self.cfg.is_mobile or self.cfg.show_touchscreen:
 				self.ui.show_touchscreen_info()
 		else:
-			self.level.run(self.ui.get_touchscreen_panel, self.ui.debug_log)
 			self.ui.reset()
+			self.level.run(self.dt, self.ui.get_touchscreen_panel, self.ui.debug_log)
 			self.ui.show_fps(self.fps)
+			self.ui.debug_panel.print("Delta time: {:<4.3f}".format(self.dt))
 			self.ui.show_health(self.cur_health, self.max_health)
 			self.ui.show_coins(self.coins)
 			if self.cfg.show_debug_info and self.cfg.god_mode:
 				self.ui.show_debug_info()
-			if self.cfg.is_mobile:
+			if self.cfg.is_mobile or self.cfg.show_touchscreen:
 				self.ui.show_touchscreen_info()
 			self.check_game_over()
 
@@ -124,7 +134,8 @@ async def main():
 	clock = pygame.time.Clock()
 	game = Game()
 
-	while True:
+	while game.cfg.is_running:
+		game.tick()
 		# for event in pygame.event.get():
 		# 	if event.type == pygame.QUIT:
 		# 		pygame.quit()
@@ -134,9 +145,11 @@ async def main():
 
 		pygame.display.update()
 		await asyncio.sleep(0)  # very important, and keep it 0
-		clock.tick(60)
+		clock.tick(game.cfg.max_fps)
 		#clock.tick()
 		game.fps = clock.get_fps()
+	#print("stop bg music")
+	game.overworld_bg_music.stop()
 
 asyncio.run( main() )
 

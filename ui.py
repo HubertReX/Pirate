@@ -74,6 +74,7 @@ class TextPrint:
         self.x = self.start_x 
         self.y = self.start_y
         self.lines_count = 0
+        self.log = []
         #self.line_height = self.line_height 
         
         

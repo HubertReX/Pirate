@@ -22,11 +22,12 @@ class Level:
 		self.display_surface = cfg.screen
 		self.world_shift = 0
 		self.current_x = None
+		self.dt = 0.0
 
 		# audio 
-		self.coin_sound = pygame.mixer.Sound('audio/effects/coin.wav')
-		self.stomp_sound = pygame.mixer.Sound('audio/effects/stomp.wav')
-		self.heart_sound = pygame.mixer.Sound('audio/effects/heart.wav')
+		self.coin_sound = pygame.mixer.Sound('audio/effects/coin.ogg')
+		self.stomp_sound = pygame.mixer.Sound('audio/effects/stomp.ogg')
+		self.heart_sound = pygame.mixer.Sound('audio/effects/heart.ogg')
 
 		# overworld connection 
 		self.create_overworld = create_overworld
@@ -54,11 +55,11 @@ class Level:
 		terrain_layout = import_csv_layout(level_data['terrain'])
 		self.level_width  = len(terrain_layout[0]) * self.cfg.tile_size
 		self.level_height = len(terrain_layout) * self.cfg.tile_size
-		print(f"screen width: {self.cfg.screen_width / self.cfg.tile_size} height: {self.cfg.screen_height / self.cfg.tile_size}")
-		print(f"level  width: {len(terrain_layout[0])} height: {len(terrain_layout)}")
+		#print(f"screen width: {self.cfg.screen_width / self.cfg.tile_size} height: {self.cfg.screen_height / self.cfg.tile_size}")
+		#print(f"level  width: {len(terrain_layout[0])} height: {len(terrain_layout)}")
 		
 		self.cfg.vertical_offset = ( self.cfg.vertical_tile_number - len(terrain_layout) ) * self.cfg.tile_size
-		print(f"vertical tile number: {self.cfg.vertical_tile_number} offset: {self.cfg.vertical_offset}")
+		#print(f"vertical tile number: {self.cfg.vertical_tile_number} offset: {self.cfg.vertical_offset}")
 
 		self.player_setup(player_layout, change_health)
 
@@ -103,7 +104,7 @@ class Level:
 
 	def create_tile_group(self, layout, type):
 		sprite_group = pygame.sprite.Group()
-		print(f"vertical tile number: {self.cfg.vertical_tile_number} offset: {self.cfg.vertical_offset}")
+		#print(f"vertical tile number: {self.cfg.vertical_tile_number} offset: {self.cfg.vertical_offset}")
 
 		for row_index, row in enumerate(layout):
 			for col_index,val in enumerate(row):
@@ -115,22 +116,22 @@ class Level:
 					if type == 'terrain':
 						terrain_tile_list = import_cut_graphics('graphics/terrain/terrain_tiles.png', self.cfg.tile_size)
 						tile_surface = terrain_tile_list[int(val)]
-						sprite = StaticTile(self.cfg.tile_size,x,y,tile_surface)
+						sprite = StaticTile(self.cfg.tile_size, x, y, tile_surface)
 						
 					if type == 'grass':
 						grass_tile_list = import_cut_graphics('graphics/decoration/grass/grass.png', self.cfg.tile_size)
 						tile_surface = grass_tile_list[int(val)]
-						sprite = StaticTile(self.cfg.tile_size,x,y,tile_surface)
+						sprite = StaticTile(self.cfg.tile_size, x, y, tile_surface)
 					
 					if type == 'crates':
 						sprite = Crate(self.cfg.tile_size,x,y)
 
 					if type == 'coins':
-						if val == '0': sprite = Coin(self.cfg.tile_size,x,y,'graphics/coins/gold',5)
-						if val == '1': sprite = Coin(self.cfg.tile_size,x,y,'graphics/coins/silver',1)
+						if val == '0': sprite = Coin(self.cfg.tile_size, x, y,'graphics/coins/gold', 5)
+						if val == '1': sprite = Coin(self.cfg.tile_size, x, y,'graphics/coins/silver', 1)
 
 					if type == 'hearts':
-						if val == '2': sprite = Heart(self.cfg.tile_size,x,y,'graphics/coins/heart')
+						if val == '2': sprite = Heart(self.cfg.tile_size,x,y,'graphics/coins/potion')
 
 					if type == 'fg palms':
 						if val == '0': sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_small',38)
@@ -138,7 +139,7 @@ class Level:
 						if val == '7': sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_small_short',-10)
 
 					if type == 'bg palms':
-						sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_bg',64)
+						sprite = Palm(self.cfg.tile_size,x,y,'graphics/terrain/palm_bg', 64)
 
 					if type == 'enemies':
 						sprite = Enemy(self.cfg.tile_size,x,y)
@@ -179,6 +180,7 @@ class Level:
 
 	def horizontal_movement_collision(self):
 		player = self.player.sprite
+		#player.collision_rect.x += player.direction.x * player.speed
 		player.collision_rect.x += player.direction.x * player.speed
 		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
 		for sprite in collidable_sprites:
@@ -192,9 +194,9 @@ class Level:
 					player.on_right = True
 					self.current_x = player.rect.right
 
-	def vertical_movement_collision(self):
+	def vertical_movement_collision(self, dt):
 		player = self.player.sprite
-		player.apply_gravity()
+		player.apply_gravity(dt)
 		collidable_sprites = self.terrain_sprites.sprites() + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
 
 		for sprite in collidable_sprites:
@@ -211,20 +213,20 @@ class Level:
 		if player.on_ground and player.direction.y < 0 or player.direction.y > 1:
 			player.on_ground = False
 
-	def scroll_x(self):
+	def scroll_x(self, dt):
 		player = self.player.sprite
 		player_x = player.rect.centerx
 		direction_x = player.direction.x
 
 		if player_x < self.cfg.screen_width / 4 and direction_x < 0:
-			self.world_shift = 8
+			self.world_shift = player.MAX_SPEED * dt
 			player.speed = 0
 		elif player_x > self.cfg.screen_width - (self.cfg.screen_width / 4) and direction_x > 0:
-			self.world_shift = -8
+			self.world_shift = -player.MAX_SPEED * dt
 			player.speed = 0
 		else:
 			self.world_shift = 0
-			player.speed = player.MAX_SPEED
+			player.speed = player.MAX_SPEED * dt
 
 	def get_player_on_ground(self):
 		if self.player.sprite.on_ground:
@@ -241,12 +243,12 @@ class Level:
 			fall_dust_particle = ParticleEffect(self.player.sprite.rect.midbottom - offset, 'land')
 			self.dust_sprite.add(fall_dust_particle)
 
-	def check_death(self):			
+	def check_death(self, dt):			
 		if self.player.sprite.rect.top > self.cfg.screen_height:
 			if not self.cfg.god_mode:
 				self.create_overworld(self.current_level, 0)
 			else:
-				self.player.sprite.safe()
+				self.player.sprite.safe(dt)
 
 			
 	def check_win(self):
@@ -288,9 +290,10 @@ class Level:
 					if not self.cfg.god_mode:
 						self.player.sprite.get_damage()
 
-	def run(self, get_touchscreen_panel, debug_log):
+	def run(self, dt, get_touchscreen_panel, debug_log):
 		# run the entire game / level 
 		
+		self.dt = dt
 		# touchscreen handle
 		self.get_touchscreen_panel = get_touchscreen_panel
 		self.debug_log = debug_log
@@ -315,7 +318,7 @@ class Level:
 		self.terrain_sprites.draw(self.display_surface)
 		
 		# enemy 
-		self.enemy_sprites.update(self.world_shift)
+		self.enemy_sprites.update(self.world_shift, dt)
 		self.constraint_sprites.update(self.world_shift)
 		self.enemy_collision_reverse()
 		self.enemy_sprites.draw(self.display_surface)
@@ -337,13 +340,17 @@ class Level:
 		# hearts
 		self.heart_sprites.update(self.world_shift)
 		self.heart_sprites.draw(self.display_surface)
+		for heart in self.heart_sprites.sprites():
+			self.debug_log("curr frames : {:4} heart curr frame: {:4.2f} curr frame int {:2}".format(self.cfg.frame_no, heart.frame_index, int(heart.frame_index)))
+			#self.debug_log("Heart curr frame: {:4.2f}".format(heart.frame_index))
+			break
 
 		# foreground palms
 		self.fg_palm_sprites.update(self.world_shift)
 		self.fg_palm_sprites.draw(self.display_surface)
 
 		# player sprites		 
-		self.player.update(self.get_touchscreen_panel, debug_log)
+		self.player.update(self.dt, self.get_touchscreen_panel, debug_log)
 		#self.cfg.show_debug_info = self.player.sprite.show_debug_info
 		#print(self.player.sprite.status)
 		if self.player.sprite.status == 'quit':
@@ -351,15 +358,15 @@ class Level:
 		self.horizontal_movement_collision()
 		
 		self.get_player_on_ground()
-		self.vertical_movement_collision()
+		self.vertical_movement_collision(dt)
 		self.create_landing_dust()
 		
-		self.scroll_x()
+		self.scroll_x(dt)
 		self.player.draw(self.display_surface)
 		self.goal.update(self.world_shift)
 		self.goal.draw(self.display_surface)
 
-		self.check_death()
+		self.check_death(dt)
 		self.check_win()
 
 		self.check_coin_collisions()
@@ -369,8 +376,8 @@ class Level:
 		# water 
 		self.water.draw(self.display_surface,self.world_shift)
 
-		try:
-			pass
-		except Exception as e:
-			print("EXCEPTION: {}".format(e))
-			self.debug_log("EXCEPTION: {}".format(e))
+		# try:
+		# 	pass
+		# except Exception as e:
+		# 	print("EXCEPTION: {}".format(e))
+		# 	self.debug_log("EXCEPTION: {}".format(e))
