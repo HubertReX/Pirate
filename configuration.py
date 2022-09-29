@@ -1,5 +1,6 @@
 import pygame, math
 import settings
+import logging
 
 class configuration:
     def __init__(self, is_mobile, is_web):
@@ -37,6 +38,13 @@ class configuration:
         # show debug info on start (press '~' or 'x' on gamepad to toggle)
         self.show_debug_info = settings.SHOW_DEBUG_INFO
 
+        # set level of logging
+        self.debug_level = settings.DEBUG_LEVEL
+        self.debug_fmt = '[%(levelname)s] %(asctime)s: %(message)s'
+
+        #logging.basicConfig(level=self.debug_level, format=self.debug_fmt)
+        #self.logger = logging.getLogger("Pirate")
+        #self.logger.debug("test")
         # show touchscreen buttons
         self.show_touchscreen = settings.SHOW_TOUCHSCREEN
 
@@ -51,7 +59,7 @@ class configuration:
         infoObject = pygame.display.Info()
         self.max_screen_width = infoObject.current_w
         self.max_screen_height = infoObject.current_h
-        print("Native resolution {}x{}".format(infoObject.current_w, infoObject.current_h))
+        logging.info("Native resolution {}x{}".format(infoObject.current_w, infoObject.current_h))
         #pygame.display.set_mode((0,0),pygame.FULLSCREEN)
         # self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
         self.flags = 0 
@@ -83,4 +91,4 @@ class configuration:
         curr_screen_width, curr_screen_height = self.screen.get_size()
         self.screen_width = curr_screen_width 
         self.screen_height = curr_screen_height 	 		
-        print("Actual resolution {}x{}".format(self.screen_width, self.screen_height))
+        logging.info("Actual resolution {}x{}".format(self.screen_width, self.screen_height))

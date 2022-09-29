@@ -7,5 +7,6 @@ project_name=Pirate
 
 cd ..
 #/Users/hubertnafalski/Library/Python/3.8/bin/
-/Users/hubertnafalski/Library/Python/3.8/bin/pygbag --build --archive --template $project_name/mobile.tmpl --app_name $project_name $project_name
+#/Users/hubertnafalski/Library/Python/3.8/bin/pygbag --build --archive --template $project_name/mobile.tmpl --app_name $project_name $project_name
+/Users/hubertnafalski/Library/Python/3.8/bin/pygbag --build --archive --app_name $project_name $project_name
 cd $project_name

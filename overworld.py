@@ -1,8 +1,10 @@
-import sys
+#import imp
+#import sys
 import pygame 
 from game_data import levels
 from support import import_folder
 from decoration import Sky
+import logging
 #from settings import *
 
 class Node(pygame.sprite.Sprite):
@@ -30,7 +32,7 @@ class Node(pygame.sprite.Sprite):
 			self.animate()
 		else:
 			tint_surf = self.image.copy()
-			tint_surf.fill('black',None,pygame.BLEND_RGBA_MULT)
+			tint_surf.fill('black', None, pygame.BLEND_RGBA_MULT)
 			self.image.blit(tint_surf,(0,0))
 
 class Icon(pygame.sprite.Sprite):
@@ -72,12 +74,16 @@ class Overworld:
 		# touchscreen fingers pressed dictionary
 		self.fingers = {}
 
-		# gamepade
+		# gamepad
+		pygame.joystick.init()
 		self.joysticks = pygame.joystick.get_count()
 		if self.joysticks > 0:
 			self.joystick = pygame.joystick.Joystick(0)
-			self.joystick.init()		
+			self.joystick.init()
 
+			logging.info(f"Gamepad found: {self.joystick.get_name()}")
+		else:
+			logging.info("Gamepad not found")
 		#self.show_debug_info = SHOW_DEBUG_INFO
 
 
@@ -123,9 +129,6 @@ class Overworld:
 			x, y = self.fingers[finger_id]
 			panel_name = get_touchscreen_panel(x,y)
 
-			print(x,y)
-			print(panel_name)
-
 			#self.debug_log("x: {:>4.2f}, y: {:>4.2f}".format(x,y))
 			#self.debug_log(panel_name)
 				
@@ -137,11 +140,8 @@ class Overworld:
 				x,y = pygame.mouse.get_pos()
 				panel_name = get_touchscreen_panel(x,y)
 
-				print(x,y)
-				print(panel_name)
-
 				#self.debug_log("x: {:>4.2f}, y: {:>4.2f}".format(x,y))
-				self.debug_log("mouse {}".format(panel_name))
+				#self.debug_log("mouse {}".format(panel_name))
 				
 		# gamepad support
 		keys = pygame.key.get_pressed()
@@ -170,13 +170,13 @@ class Overworld:
 				self.move_direction = self.get_movement_data('previous')
 				self.current_level -= 1
 				self.moving = True
-			elif (keys[pygame.K_UP]):
+			elif (keys[pygame.K_UP] or panel_name == "UP"):
 				selected_line_up()
-			elif (keys[pygame.K_DOWN]):
+			elif (keys[pygame.K_DOWN] or panel_name == "DOWN"):
 				selected_line_down()
 			elif keys[pygame.K_SPACE] or button_0 or panel_name == "SELECT":
 				self.create_level(self.current_level)
-			elif keys[pygame.K_BACKQUOTE] or button_2:
+			elif keys[pygame.K_BACKQUOTE] or button_2 or panel_name == "DEBUG":
 				self.cfg.show_debug_info = not self.cfg.show_debug_info
 
 	def get_movement_data(self,target):
@@ -202,6 +202,10 @@ class Overworld:
 			current_time = pygame.time.get_ticks()
 			if current_time - self.start_time >= self.timer_length:
 				self.allow_input = True
+
+	def game_over(self, show_game_over):
+		self.sky.draw(self.display_surface)
+		show_game_over()
 
 	def run(self, selected_line_up, selected_line_down, get_touchscreen_panel, debug_log):
 		self.debug_log = debug_log

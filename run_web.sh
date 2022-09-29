@@ -30,5 +30,5 @@ project_name=Pirate
 cd ..
 #/Users/hubertnafalski/Library/Python/3.8/bin/
 #pygbag --bind 127.0.0.1 --template $project_name/default.tmpl --app_name $project_name $project_name
-/Users/hubertnafalski/Library/Python/3.8/bin/pygbag --bind 192.168.1.18 --template $project_name/mobile.tmpl --app_name $project_name $project_name
+/Users/hubertnafalski/Library/Python/3.8/bin/pygbag --bind  192.168.1.18 --template $project_name/mobile.tmpl --app_name $project_name $project_name
 cd $project_name

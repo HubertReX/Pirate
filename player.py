@@ -1,6 +1,8 @@
 #from cgi import print_arguments
-import sys
+#from cgitb import lookup
+#import sys
 import pygame
+import logging
 # from settings import * 
 from support import import_folder
 from math import sin
@@ -16,7 +18,7 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(topleft = pos)
 		self.pos = pygame.math.Vector2(self.rect.topleft)
 
-		self.debug_log = lambda text: print(text)
+		self.debug_log = lambda text: logging.debug(text)
 
 		#self.show_debug_info = SHOW_DEBUG_INFO
 		
@@ -62,6 +64,10 @@ class Player(pygame.sprite.Sprite):
 		if self.joysticks > 0:
 			self.joystick = pygame.joystick.Joystick(0)
 			self.joystick.init()
+			
+			logging.info(f"Gamepad found: {self.joystick.get_name()}")
+		else:
+			logging.info("Gamepad not found")
 
 
 
@@ -147,12 +153,6 @@ class Player(pygame.sprite.Sprite):
 		for finger_id in self.fingers:
 			x, y = self.fingers[finger_id]
 			panel_name = get_touchscreen_panel(x,y)
-
-			print(x, y)
-			print(panel_name)
-
-			#self.debug_log("x: {:>4.2f}, y: {:>4.2f}".format(x, y))
-			#self.debug_log(panel_name)
 				
 		# mouse support
 		# MOUSEBUTTONUP is also triggered after FINGERUP !!!
@@ -162,21 +162,17 @@ class Player(pygame.sprite.Sprite):
 				x, y = pygame.mouse.get_pos()
 				panel_name = get_touchscreen_panel(x,y)
 
-				print(x, y)
-				print(panel_name)
-
 				#self.debug_log("mouse x: {:>4.2f}, y: {:>4.2f}".format(x, y))
-				self.debug_log("mouse {}".format(panel_name))
+				#self.debug_log("mouse {}".format(panel_name))
 
 		# gamepad support
 		axis_0   = 0.0
 		button_0 = 0.0
 		button_1 = 0.0
 		button_2 = 0.0
-		# print("Gamepads count: {}".format(joysticks))
+
 		gamepad_move = False
 		if self.joysticks  > 0:
-			#print(joystick.get_name, joystick.get_id, joystick.get_instance_id, joystick.get_guid, joystick.get_power_level)
 			
 			#axes = self.joystick.get_numaxes()
 			#if axes > 0:
@@ -189,10 +185,8 @@ class Player(pygame.sprite.Sprite):
 			button_0 = self.joystick.get_button(0) 
 			button_1 = self.joystick.get_button(1) 
 			button_2 = self.joystick.get_button(2) 
-			if button_1 > 0:
-				self.status = 'quit'
-			#print("axes: {} buttons: {}".format(axes, buttons))
-			#print("axis_0: {} button_0: {}".format(axis_0, joystick.get_button(0) ))
+			# if button_1 > 0:
+			# 	self.status = 'quit'
 
 			if axis_0 > 0.1:
 				self.direction.x = 1
@@ -201,16 +195,17 @@ class Player(pygame.sprite.Sprite):
 				gamepad_move = True
 			elif axis_0 < -0.1:
 				self.direction.x = -1
-				self.speed = self.MAX_SPEED * axis_0 * dt
+				self.speed = self.MAX_SPEED * -axis_0 * dt
 				self.facing_right = False
 				gamepad_move = True
 			else:
 				self.direction.x = 0				
-			#print("speed:{}".format(self.speed))
+			
+			#logging.debug("speed:{}".format(self.speed))
 
-			if button_0 == 1 and self.on_ground:
-				self.jump(dt)
-				self.create_jump_particles(self.rect.midbottom)
+			# if button_0 == 1 and self.on_ground:
+			# 	self.jump(dt)
+			# 	self.create_jump_particles(self.rect.midbottom)
 		
 		# keyboard support
 		if (keys[pygame.K_RIGHT] or panel_name == "RIGHT") and not gamepad_move:
@@ -224,16 +219,16 @@ class Player(pygame.sprite.Sprite):
 		elif not gamepad_move:
 			self.direction.x = 0
 
-		if (keys[pygame.K_SPACE] or panel_name == "SELECT") and self.on_ground:
+		if (keys[pygame.K_SPACE] or button_0 == 1 or panel_name == "SELECT") and self.on_ground:
 			self.jump(dt)
 			self.create_jump_particles(self.rect.midbottom)
 
-		if keys[pygame.K_q] or keys[pygame.K_ESCAPE] or panel_name == "BACK":
+		if keys[pygame.K_q] or keys[pygame.K_ESCAPE] or button_1 or panel_name == "BACK":
 				#pygame.quit()
 				#sys.exit()
 				self.status = 'quit'
 
-		if keys[pygame.K_BACKQUOTE] or button_2:
+		if keys[pygame.K_BACKQUOTE] or button_2 or panel_name == "DEBUG":
 			self.cfg.show_debug_info = not self.cfg.show_debug_info
 
 		for event in pygame.event.get():
