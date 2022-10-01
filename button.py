@@ -1,6 +1,6 @@
 import pygame
 
-def get_font(size, is_web=False): # Returns Press-Start-2P in the desired size
+def get_font(size, is_web=False) -> pygame.font: # Returns Press-Start-2P in the desired size
     if not is_web:
         f = pygame.font.Font("graphics/ui/ARCADEPI.ttf", size)
     else:

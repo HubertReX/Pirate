@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="13" height="8" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" source="../tilesets/menu_green.tsx"/>
+ <tileset firstgid="17" source="../tilesets/green_button.tsx"/>
+ <tileset firstgid="33" source="../tilesets/Big Banner.tsx"/>
+ <tileset firstgid="66" source="../tilesets/Orange Paper.tsx"/>
+ <tileset firstgid="82" source="../prefabs.tsx"/>
+ <tileset firstgid="94" source="../tilesets/Small Banner.tsx"/>
+ <tileset firstgid="107" source="../tilesets/Small Icons.tsx"/>
+ <tileset firstgid="132" source="../tilesets/Yellow Button.tsx"/>
+ <tileset firstgid="148" source="../tilesets/Yellow Paper.tsx"/>
+ <layer id="1" name="board" width="13" height="8">
+  <data encoding="csv">
+16,15,15,15,15,15,15,15,15,15,15,15,14,
+13,12,12,12,12,12,12,12,12,12,12,12,11,
+13,12,12,12,12,12,12,12,12,12,12,12,11,
+13,12,12,12,12,12,12,12,12,12,12,12,11,
+13,12,12,12,12,12,12,12,12,12,12,12,11,
+13,12,12,12,12,12,12,12,12,12,12,12,11,
+13,12,12,12,12,12,12,12,12,12,12,12,11,
+10,9,9,9,9,9,9,9,9,9,9,9,8
+</data>
+ </layer>
+ <layer id="2" name="buttons" width="13" height="8">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,133,134,135,0,
+0,0,0,0,31,30,30,30,29,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,31,30,30,30,29,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,132,0,31,30,30,30,29,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="3" name="banners" width="13" height="8">
+  <data encoding="csv">
+148,149,150,0,33,63,63,63,34,0,0,0,0,
+151,152,153,0,35,64,64,64,36,0,0,0,0,
+154,155,156,0,37,65,65,65,38,66,67,68,0,
+33,63,45,58,0,0,0,0,0,69,70,71,0,
+41,64,47,60,0,0,0,0,0,72,73,74,0,
+37,65,49,62,94,106,106,95,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,88,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="4" name="icons" width="13" height="8">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,128,0,0,
+0,0,0,0,0,0,119,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,121,0,112,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,120,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

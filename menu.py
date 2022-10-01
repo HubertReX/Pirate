@@ -2,16 +2,26 @@ import pygame, sys
 from button import Button, get_font
 
  
+class Label():
+    def __init__(self, screen: pygame.surface, text: str, color: str, font_size: int, antialias: bool, allign: str, postion: tuple[int, int]) -> None:
+        self.screen = screen
+        self.text = get_font(font_size).render(text, antialias, color)
+        aligned_rect = {allign: postion}
+        self.rect = self.text.get_rect(**aligned_rect)
+
+    def update(self) -> None:
+        self.screen.blit(self.text, self.rect)
+        #elf.screen.blit(VER_TEXT, VER_RECT)
 
 class Game():
     def __init__(self):
         pygame.init()
 
-        self.SCREEN = pygame.display.set_mode((1280, 720))
+        self.SCREEN = pygame.display.set_mode((1280, 800)) # WXGA 40 x 25  (1,6 16:10)  
         pygame.display.set_caption("Menu")
 
-        self.BG = pygame.image.load("graphics/ui/menu_bg.png")
-        self.BG = pygame.transform.scale(self.BG, (1280, 720))
+        self.BG = pygame.image.load("graphics/menu/main_menu.png")
+        self.BG = pygame.transform.scale(self.BG, (1280, 800))
 
 
     def play(self):
@@ -73,29 +83,43 @@ class Game():
 def main_menu():
     game = Game()
 
+    labels = []
+    labels.append(Label(game.SCREEN, "Pirate!", "#c90000",
+                  50, True, "center", (640, 100)))
+    labels.append(Label(game.SCREEN, "v 0.3",   "#c90000",
+                  20, True, "center", (975, 100)))
+
+    labels.append(Label(game.SCREEN, "HIGHSCORE", "#c90000",
+                  17, True, "midtop", (270, 100)))
+    labels.append(Label(game.SCREEN, "0032", "#ffffff",
+                  20, True, "midtop", (270, 140)))
+
+    labels.append(Label(game.SCREEN, "Made by:", "#c90000",
+                  20, True, "topleft", (1000, 660)))
+    labels.append(Label(game.SCREEN, "Hubert,", "#c90000",
+                  20, True, "topleft", (1000, 685)))
+    labels.append(Label(game.SCREEN, "Tymon & Mati", "#c90000",
+                  20, True, "topleft", (1000, 710)))
+
+    buttons = []
+
+    PLAY_BUTTON = Button(game.SCREEN, image=None, pos=(640, 265), size=(600, 150),
+                         text_input="PLAY", font=get_font(50), base_color="#d7fcd4", hovering_color="White", action=game.play)
+    buttons.append(PLAY_BUTTON)
+    OPTIONS_BUTTON = Button(game.SCREEN, image=None, pos=(640, 465), size=(600, 150),
+                            text_input="OPTIONS", font=get_font(50), base_color="#d7fcd4", hovering_color="White", action=game.options)
+    buttons.append(OPTIONS_BUTTON)
+    QUIT_BUTTON = Button(game.SCREEN, image=None, pos=(640, 665), size=(420, 150),
+                         text_input="QUIT", font=get_font(50), base_color="#d7fcd4", hovering_color="White", action=game.quit)
+    buttons.append(QUIT_BUTTON)
+
     while True:
         game.SCREEN.blit(game.BG, (0, 0))
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
-        
-        buttons = []
-        LEFT_BUTTON = Button(game.SCREEN, image=pygame.image.load("graphics/touchscreen/left.png"), pos=(50, 210), size=(64,64),
-                            text_input="", font=get_font(70), base_color="#d7fcd4", hovering_color="White", action=game.play)
-        buttons.append(LEFT_BUTTON)    
-        PLAY_BUTTON = Button(game.SCREEN, image=pygame.image.load("graphics/ui/menu_button.png"), pos=(640, 210), size=(500,150),
-                            text_input=" PLAY", font=get_font(70), base_color="#d7fcd4", hovering_color="White", action=game.play)
-        buttons.append(PLAY_BUTTON)     
-        OPTIONS_BUTTON = Button(game.SCREEN, image=pygame.image.load("graphics/ui/menu_button.png"), pos=(640, 380), size=(600,150),
-                            text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="White", action=game.options)
-        buttons.append(OPTIONS_BUTTON)                                 
-        QUIT_BUTTON = Button(game.SCREEN, image=pygame.image.load("graphics/ui/menu_button.png"), pos=(640, 550), size=(420,150),
-                            text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White", action=game.quit)
-        buttons.append(QUIT_BUTTON)     
-
-        game.SCREEN.blit(MENU_TEXT, MENU_RECT)
+        for label in labels:
+            label.update()
 
         for button in buttons:
             button.changeColor(MENU_MOUSE_POS)
@@ -110,11 +134,6 @@ def main_menu():
                 for button in buttons:
                     if button.checkForInput(MENU_MOUSE_POS):
                         button.act()
-                # if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                #     game.play()
-                # if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                #     game.options()
-                # if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
 
 
         pygame.display.update()

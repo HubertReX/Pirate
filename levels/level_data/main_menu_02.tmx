@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="19" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="10">
+ <tileset firstgid="1" source="../tilesets/menu_green.tsx"/>
+ <tileset firstgid="17" source="../tilesets/green_button.tsx"/>
+ <tileset firstgid="33" source="../tilesets/Big Banner.tsx"/>
+ <tileset firstgid="66" source="../tilesets/Orange Paper.tsx"/>
+ <tileset firstgid="82" source="../prefabs.tsx"/>
+ <tileset firstgid="94" source="../tilesets/Small Banner.tsx"/>
+ <tileset firstgid="107" source="../tilesets/Small Icons.tsx"/>
+ <tileset firstgid="132" source="../tilesets/Yellow Button.tsx"/>
+ <tileset firstgid="148" source="../tilesets/Yellow Paper.tsx"/>
+ <layer id="1" name="board" width="19" height="12">
+  <data encoding="csv">
+0,0,16,15,15,15,15,15,15,15,15,15,15,15,15,15,14,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,0,0,
+0,0,10,9,9,9,9,9,9,9,9,9,9,9,9,9,8,0,0
+</data>
+ </layer>
+ <layer id="2" name="buttons" width="19" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,85,0,0,0,0,
+0,0,0,86,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,25,24,24,24,24,24,23,0,0,0,0,0,0,
+0,0,0,0,0,0,19,18,18,18,18,18,17,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,25,24,24,24,24,24,23,0,0,0,0,0,0,
+0,0,0,0,0,0,19,18,18,18,18,18,17,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,25,24,24,24,24,24,23,0,0,0,0,0,0,
+0,0,0,0,0,0,19,18,18,18,18,18,17,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="3" name="banners" width="19" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,33,63,63,63,34,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,35,64,64,64,36,0,0,91,0,0,0,0,
+0,0,0,89,0,0,0,37,65,65,65,38,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,63,63,40,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,35,64,64,36,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,37,65,65,44,0
+</data>
+ </layer>
+ <layer id="4" name="icons" width="19" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="5" name="Lables">
+  <object id="1" name="Pirate" x="261.144" y="31.3605" width="96.6094" height="26.6804">
+   <text fontfamily="Arial Black" pixelsize="24" wrap="1" color="#c90000" bold="1" halign="center" valign="center">Pirate!</text>
+  </object>
+  <object id="4" name="Play" x="257.462" y="97.2886" width="96.6094" height="53.4655">
+   <text fontfamily="Arial Black" pixelsize="36" wrap="1" color="#ffffff" bold="1" halign="center">Play</text>
+  </object>
+  <object id="5" name="Options" x="225.996" y="195.581" width="157.489" height="52.0974">
+   <text fontfamily="Arial Black" pixelsize="36" wrap="1" color="#ffffff" bold="1" halign="center">Options</text>
+  </object>
+  <object id="6" name="Quit" x="241.729" y="289.978" width="135.6" height="50.0453">
+   <text fontfamily="Arial Black" pixelsize="36" wrap="1" color="#ffffff" bold="1" halign="center">Quit</text>
+  </object>
+  <object id="7" name="Pirate" x="416.843" y="31.8065" width="96.6094" height="26.6804">
+   <text fontfamily="Arial Black" pixelsize="14" wrap="1" color="#c30000" bold="1" halign="center" valign="center">v0.3</text>
+  </object>
+  <object id="8" name="Options" x="472.935" y="315.288" width="78.8243" height="39.7847">
+   <text fontfamily=".AppleSystemUIFont" pixelsize="10" wrap="1" color="#ffffff">Made by:
+Hubert, Tymon &amp; Mati</text>
+  </object>
+  <object id="9" name="Pirate" x="96.7121" y="35.2267" width="61.0393" height="57.4623">
+   <text fontfamily="Arial Black" pixelsize="10" wrap="1" color="#c30000" bold="1" halign="center">Highscore
+
+032</text>
+  </object>
+ </objectgroup>
+</map>
