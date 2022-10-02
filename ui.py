@@ -236,7 +236,7 @@ class UI:
     def show_touchscreen_info(self):
         for button in self.buttons:
             button.changeColor(pygame.mouse.get_pos())
-            button.update()
+            button.render(self.display_surface)
         # self.touchscreen_left_panel.highligt_line()
         # self.touchscreen_left_panel.background_line()
         # self.touchscreen_left_panel.print("LEFT")

@@ -9,7 +9,7 @@ class Label():
         aligned_rect = {allign: postion}
         self.rect = self.text.get_rect(**aligned_rect)
 
-    def update(self) -> None:
+    def render(self) -> None:
         self.screen.blit(self.text, self.rect)
         #elf.screen.blit(VER_TEXT, VER_RECT)
 
@@ -38,7 +38,7 @@ class Game():
                                 text_input="BACK", font=get_font(75), base_color="White", hovering_color="Green")
 
             PLAY_BACK.changeColor(PLAY_MOUSE_POS)
-            PLAY_BACK.update()
+            PLAY_BACK.render()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -68,7 +68,7 @@ class Game():
                                 text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
             OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-            OPTIONS_BACK.update()
+            OPTIONS_BACK.render()
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -106,7 +106,7 @@ def main_menu():
     PLAY_BUTTON = Button(game.SCREEN, image=None, pos=(640, 265), size=(600, 150),
                          text_input="PLAY", font=get_font(50), base_color="#d7fcd4", hovering_color="White", action=game.play)
     buttons.append(PLAY_BUTTON)
-    OPTIONS_BUTTON = Button(game.SCREEN, image=None, pos=(640, 465), size=(600, 150),
+    OPTIONS_BUTTON = Button(game.SCREEN, image=None, pos=(640, 400), size=(600, 150),
                             text_input="OPTIONS", font=get_font(50), base_color="#d7fcd4", hovering_color="White", action=game.options)
     buttons.append(OPTIONS_BUTTON)
     QUIT_BUTTON = Button(game.SCREEN, image=None, pos=(640, 665), size=(420, 150),
@@ -119,11 +119,11 @@ def main_menu():
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
         for label in labels:
-            label.update()
+            label.render()
 
         for button in buttons:
             button.changeColor(MENU_MOUSE_POS)
-            button.update()
+            button.render()
         
         keys = pygame.key.get_pressed()
         for event in pygame.event.get():

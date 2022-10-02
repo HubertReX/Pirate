@@ -10,6 +10,9 @@
  <tile id="2">
   <image width="32" height="32" source="../../graphics/Orange Paper/3.png"/>
  </tile>
+ <tile id="12">
+  <image width="32" height="32" source="../../graphics/Orange Paper/13.png"/>
+ </tile>
  <tile id="3">
   <image width="32" height="32" source="../../graphics/Orange Paper/4.png"/>
  </tile>
@@ -18,6 +21,9 @@
  </tile>
  <tile id="5">
   <image width="32" height="32" source="../../graphics/Orange Paper/6.png"/>
+ </tile>
+ <tile id="13">
+  <image width="32" height="32" source="../../graphics/Orange Paper/14.png"/>
  </tile>
  <tile id="6">
   <image width="32" height="32" source="../../graphics/Orange Paper/7.png"/>
@@ -28,6 +34,9 @@
  <tile id="8">
   <image width="32" height="32" source="../../graphics/Orange Paper/9.png"/>
  </tile>
+ <tile id="14">
+  <image width="32" height="32" source="../../graphics/Orange Paper/15.png"/>
+ </tile>
  <tile id="9">
   <image width="32" height="32" source="../../graphics/Orange Paper/10.png"/>
  </tile>
@@ -36,15 +45,6 @@
  </tile>
  <tile id="11">
   <image width="32" height="32" source="../../graphics/Orange Paper/12.png"/>
- </tile>
- <tile id="12">
-  <image width="32" height="32" source="../../graphics/Orange Paper/13.png"/>
- </tile>
- <tile id="13">
-  <image width="32" height="32" source="../../graphics/Orange Paper/14.png"/>
- </tile>
- <tile id="14">
-  <image width="32" height="32" source="../../graphics/Orange Paper/15.png"/>
  </tile>
  <tile id="15">
   <image width="32" height="32" source="../../graphics/Orange Paper/16.png"/>

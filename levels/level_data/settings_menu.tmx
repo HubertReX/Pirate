@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="19" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="14">
+ <tileset firstgid="1" source="../tilesets/menu_green.tsx"/>
+ <tileset firstgid="17" source="../tilesets/green_button.tsx"/>
+ <tileset firstgid="33" source="../tilesets/Big Banner.tsx"/>
+ <tileset firstgid="66" source="../tilesets/Orange Paper.tsx"/>
+ <tileset firstgid="82" source="../prefabs.tsx"/>
+ <tileset firstgid="94" source="../tilesets/Small Banner.tsx"/>
+ <tileset firstgid="107" source="../tilesets/Small Icons.tsx"/>
+ <tileset firstgid="132" source="../tilesets/Yellow Button.tsx"/>
+ <tileset firstgid="148" source="../tilesets/Yellow Paper.tsx"/>
+ <tileset firstgid="164" source="../tilesets/Green Board.tsx"/>
+ <layer id="1" name="board" width="19" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,173,174,174,174,175,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,164,165,165,165,166,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,167,12,12,12,169,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,167,12,12,12,169,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,167,12,12,12,169,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,167,12,12,12,169,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,167,12,12,12,169,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,170,171,171,171,172,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="3" name="banners" width="19" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,75,76,76,76,77,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,148,149,149,149,150,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,151,152,152,152,153,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,151,152,152,152,153,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,154,155,155,155,156,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,148,149,149,149,150,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,151,152,152,152,153,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,154,155,155,155,156,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="2" name="buttons" width="19" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,32,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,32,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,32,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="4" name="icons" width="19" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,111,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,112,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,111,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="5" name="Lables">
+  <object id="1" name="Settings" x="254.811" y="65.3605" width="96.6094" height="26.6804">
+   <text fontfamily="Arial Black" pixelsize="13" wrap="1" bold="1" halign="center" valign="center">Settings</text>
+  </object>
+  <object id="4" name="Music" x="244.795" y="135.955" width="67.6094" height="14.7988">
+   <text fontfamily="Arial Black" pixelsize="12" wrap="1" bold="1">Music</text>
+  </object>
+  <object id="12" name="Sfx" x="242.862" y="170.601" width="67.6094" height="14.7988">
+   <text fontfamily="Arial Black" pixelsize="12" wrap="1" bold="1">SFX</text>
+  </object>
+  <object id="13" name="Full screen" x="243.529" y="264.934" width="75.9427" height="14.7988">
+   <text fontfamily="Arial Black" pixelsize="12" wrap="1" bold="1">Full screen</text>
+  </object>
+ </objectgroup>
+</map>

@@ -73,7 +73,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="5" name="Lables">
+ <objectgroup id="5" name="Lables" visible="0">
   <object id="1" name="Pirate" x="261.144" y="31.3605" width="96.6094" height="26.6804">
    <text fontfamily="Arial Black" pixelsize="24" wrap="1" color="#c90000" bold="1" halign="center" valign="center">Pirate!</text>
   </object>
