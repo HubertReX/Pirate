@@ -3,24 +3,68 @@ import os, sys, time, pygame
 from states.title import Title
 from button import Button, get_font
 
+import asyncio
+from configuration import configuration
+from settings import DEBUG_LEVEL
+from level import Level
+from overworld import Overworld
+from ui import UI
+import logging
+
+debug_fmt = '[%(levelname)7s] %(asctime)s: %(message)s'
+logging.basicConfig(level=DEBUG_LEVEL, format=debug_fmt)
 class Game():
         def __init__(self):
+            # pygame engin initialization
             pygame.init()
+            # gamepad initialize (buggy, sometimes works only after 5-10 s.)
+            pygame.joystick.init()
+            # process command line parameters and environment
+            self.process_env()
+            # load and set up configuration (incl. resolution)
+            self.cfg = configuration(self.is_mobile, self.is_web)   
+
             self.tile_size = 32
-            self.GAME_W, self.GAME_H = 19 * self.tile_size, 12 * self.tile_size  #  608, 384 # 480, 270
-            self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 1280, 800  # WXGA
+            self.GAME_W = 19 * self.tile_size
+            self.GAME_H = 12 * self.tile_size  #  608, 384 # 480, 270
+            self.SCREEN_WIDTH = 1280
+            self.SCREEN_HEIGHT = 800  # WXGA
             self.x_ration = self.SCREEN_WIDTH  / self.GAME_W
             self.y_ration = self.SCREEN_HEIGHT / self.GAME_H
-            self.game_canvas = pygame.Surface((self.GAME_W, self.GAME_H)) 
+
+            self.canvas = pygame.Surface((self.GAME_W, self.GAME_H)) 
             self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
-            pygame.display.set_caption("Pirate")
-            self.running, self.playing = True, True
+            pygame.display.set_caption("Pirate!")
+            
+            self.running = True
+            self.playing = True
             self.actions = {"left": False, "right": False, "up" : False, "down" : False, "action" : False, "back" : False, "start" : False, "debug" : False, "mouse_button" : False}
-            self.dt, self.prev_time = 0, 0
+            self.dt = 0
+            self.prev_time = 0
             self.mouse_pos = (0,0)
             self.state_stack = []
             self.load_assets()
             self.load_states()
+
+        def process_env(self):
+            if (sys.platform == "emscripten"):
+                self.is_web = True
+                logging.info("Running inside Web")
+            else:
+                self.is_web = False
+
+            
+            self.is_mobile = False
+            n = len(sys.argv)
+            if n > 1:
+                logging.debug("__________ ARGV ___________")
+                for i in range(1, n):
+                    logging.debug(sys.argv[i])
+                    if "mobile=" in sys.argv[i]:
+                        mobile = sys.argv[i].split("=")[1]
+                        if mobile.upper() != "FALSE":
+                            self.is_mobile = mobile
+                            logging.info("Running on mobile phone")
 
         def game_loop(self):
             while self.playing:
@@ -104,17 +148,16 @@ class Game():
 
         def render(self):
             if len(self.state_stack) > 0:
-                self.state_stack[-1].render(self.game_canvas)
+                self.state_stack[-1].render(self.canvas)
 
-            # Render current state to the screen
-            self.screen.blit(pygame.transform.scale(self.game_canvas, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT)), (0,0))
+            # Render current state to the screen (resize canvas to screen size)
+            self.screen.blit(pygame.transform.scale(self.canvas, (self.SCREEN_WIDTH, self.SCREEN_HEIGHT)), (0,0))
             pygame.display.flip()
 
-
         def get_dt(self):
-            now = time.time()
-            self.dt = now - self.prev_time
-            self.prev_time = now
+            self.dt = time.perf_counter() - self.prev_time
+            self.prev_time = time.perf_counter()
+            self.cfg.frame_no += 1
 
         def draw_text(self, surface, text, color, x, y):
             text_surface = get_font(20, False).render(

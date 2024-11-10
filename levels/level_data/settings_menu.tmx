@@ -58,7 +58,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="4" name="icons" width="19" height="12">
+ <layer id="4" name="icons" width="19" height="12" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -74,7 +74,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="5" name="Lables">
+ <objectgroup id="5" name="Lables" visible="0">
   <object id="1" name="Settings" x="254.811" y="65.3605" width="96.6094" height="26.6804">
    <text fontfamily="Arial Black" pixelsize="13" wrap="1" bold="1" halign="center" valign="center">Settings</text>
   </object>

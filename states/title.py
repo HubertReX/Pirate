@@ -3,7 +3,7 @@ from button import Button, get_font, Label
 from states.state import State
 from states.game_world import Game_World
 from states.options import OptionsMenu
-
+import logging
 
 
 class Title(State):

@@ -10,6 +10,9 @@ Original author's repo:
 
 https://github.com/clear-code-projects/2D-Mario-style-platformer
 
+Some gameflow logic taken from:
+https://github.com/ChristianD37/YoutubeTutorials
+
 ## Play on-line:
 [Pirate on itch.io!](https://hubertnafalski.itch.io/pirate)
 

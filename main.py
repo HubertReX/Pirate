@@ -188,7 +188,7 @@ async def main():
         await asyncio.sleep(0)  # very important, and keep it 0
         clock.tick(game.cfg.max_fps)
         # clock.tick()
-        game.fps = clock.get_fps()
+        game.fps = clock.get_fps() 
     #logging.debug("stop bg music before clean exit")
     game.overworld_bg_music.stop()
     game.overworld.game_over(game.ui.show_game_over)

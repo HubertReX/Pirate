@@ -1,3 +1,5 @@
+import logging
+
 class State():
     def __init__(self, game):
         self.game = game
@@ -28,4 +30,4 @@ class State():
         stk = ""
         for s in self.game.state_stack:
             stk += " -> " + s.__class__.__name__
-        # print(stk)
+        logging.debug(stk)

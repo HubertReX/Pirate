@@ -2,6 +2,7 @@ import pygame, os
 from states.state import State
 from states.party import PartyMenu
 from button import Button, get_font, Label
+import logging
 
 class OptionsMenu(State):
     def __init__(self, game):

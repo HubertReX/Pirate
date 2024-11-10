@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="green_button" tilewidth="14" tileheight="14" tilecount="16" columns="0" objectalignment="topleft" tilerendersize="grid">
+<tileset version="1.9" tiledversion="1.9.2" name="green_button" tilewidth="14" tileheight="14" tilecount="16" columns="0" objectalignment="topleft">
+ <tileoffset x="8" y="-8"/>
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="8">
   <image width="14" height="14" source="../../graphics/green_button/8.png"/>
